@@ -9,7 +9,7 @@ import fs from 'fs';
 const app = express();
 app.use(cookieParser())
 app.use(cors({
-  origin: 'https://frontend-3hgp.onrender.com',
+  origin: '*',
   credentials: true
 }));
 app.use(express.json({

@@ -1,0 +1,4 @@
+#EXTM3U
+# This sample master playlist points to a public test HLS stream so you can verify the player quickly
+#EXT-X-STREAM-INF:BANDWIDTH=800000,RESOLUTION=960x540
+https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8

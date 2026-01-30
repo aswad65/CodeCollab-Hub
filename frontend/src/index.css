@@ -1,0 +1,57 @@
+@import "tailwindcss";
+
+/* Code Editor Styles */
+.editor-textarea {
+  outline: none;
+  border: none;
+  background: transparent;
+  color: transparent;
+  caret-color: #d4d4d4;
+  resize: none;
+  font-family: 'Fira code', 'Fira Mono', monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  padding: 16px;
+  margin: 0;
+  width: 100%;
+  min-height: 100%;
+  white-space: pre;
+  overflow-wrap: normal;
+  overflow-x: auto;
+}
+
+.editor-pre {
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  font-family: 'Fira code', 'Fira Mono', monospace;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.editor-textarea::selection {
+  background: rgba(0, 123, 255, 0.3);
+}
+
+/* Scrollbar styling for editor */
+.editor-textarea::-webkit-scrollbar,
+.editor-pre::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+.editor-textarea::-webkit-scrollbar-track,
+.editor-pre::-webkit-scrollbar-track {
+  background: #1e1e1e;
+}
+
+.editor-textarea::-webkit-scrollbar-thumb,
+.editor-pre::-webkit-scrollbar-thumb {
+  background: #424242;
+  border-radius: 6px;
+}
+
+.editor-textarea::-webkit-scrollbar-thumb:hover,
+.editor-pre::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}

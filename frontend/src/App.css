@@ -1,0 +1,40 @@
+/* Editor horizontal scrolling styles */
+.editor-pre {
+  white-space: pre !important;
+  overflow-x: auto !important;
+  overflow-y: visible !important;
+  display: block;
+}
+
+.editor-textarea {
+  white-space: pre !important;
+  overflow-x: auto !important;
+  overflow-y: auto !important;
+}
+
+/* Ensure code blocks don't wrap */
+code {
+  white-space: pre !important;
+}
+
+/* Scrollbar styling */
+.editor-pre::-webkit-scrollbar,
+.editor-textarea::-webkit-scrollbar {
+  height: 8px;
+}
+
+.editor-pre::-webkit-scrollbar-track,
+.editor-textarea::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+
+.editor-pre::-webkit-scrollbar-thumb,
+.editor-textarea::-webkit-scrollbar-thumb {
+  background: #444;
+  border-radius: 4px;
+}
+
+.editor-pre::-webkit-scrollbar-thumb:hover,
+.editor-textarea::-webkit-scrollbar-thumb:hover {
+  background: #666;
+}

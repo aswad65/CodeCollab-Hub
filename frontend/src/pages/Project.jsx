@@ -11,7 +11,6 @@ import Editor from 'react-simple-code-editor';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/atom-one-dark.css';
 import { initializeWebContainer } from '../config/webcontainer';
-import LivePreview from '../components/LivePreview';
 
 export const Project = () => {
   const [showUserList, setShowUserList] = useState(false)
@@ -41,8 +40,8 @@ export const Project = () => {
 
   const [showPreview, setShowPreview] = React.useState(false);
   const [previewUrl, setPreviewUrl] = React.useState(IframeUrl || "");
-  const [iframeKey, setIframeKey] = React.useState(0);
-  const url = "https://backend-cv0c.onrender.com"
+  const [iframeKey, setIframeKey] = React.useState(0); 
+  const url ="https://backend-cv0c.onrender.com"
   React.useEffect(() => {
     if (IframeUrl && !previewUrl) setPreviewUrl(IframeUrl);
   }, [IframeUrl]);
@@ -327,46 +326,46 @@ export const Project = () => {
 
   let serverProcess;
 
-  const handleRun = async () => {
-    if (!files || Object.keys(files).length === 0) {
-      toast.error("No files available to run");
-      return;
+const handleRun = async () => {
+  if (!files || Object.keys(files).length === 0) {
+    toast.error("No files available to run");
+    return;
+  }
+
+  let instance = webcontainer;
+  if (!instance) {
+    instance = await initializeWebContainer();
+    setwebcontainer(instance);
+  }
+
+  if (serverProcess) {
+    await serverProcess.kill();
+    console.log("Previous server killed");
+  }
+
+  const formattedFiles = convertToWebContainerFormat(files);
+  await instance.mount(formattedFiles);
+
+  const installProcess = await instance.spawn('npm', ['install']);
+  installProcess.output.pipeTo(new WritableStream({
+    write(chunk) {
+      console.log(chunk);
     }
+  }));
 
-    let instance = webcontainer;
-    if (!instance) {
-      instance = await initializeWebContainer();
-      setwebcontainer(instance);
+  serverProcess = await instance.spawn('npm', ['start']);
+  serverProcess.output.pipeTo(new WritableStream({
+    write(chunk) {
+      console.log(chunk);
     }
+  }));
 
-    if (serverProcess) {
-      await serverProcess.kill();
-      console.log("Previous server killed");
-    }
+  instance.on('server-ready', (port, url) => {
+    setIframeUrl(url);
+  });
 
-    const formattedFiles = convertToWebContainerFormat(files);
-    await instance.mount(formattedFiles);
-
-    const installProcess = await instance.spawn('npm', ['install']);
-    installProcess.output.pipeTo(new WritableStream({
-      write(chunk) {
-        // console.log(chunk);
-      }
-    }));
-
-    serverProcess = await instance.spawn('npm', ['start']);
-    serverProcess.output.pipeTo(new WritableStream({
-      write(chunk) {
-        // console.log(chunk);
-      }
-    }));
-
-    instance.on('server-ready', (port, url) => {
-      setIframeUrl(url);
-    });
-
-    toast.success('Running code');
-  };
+  toast.success('Running code');
+};
 
   return (
     <>
@@ -536,7 +535,7 @@ export const Project = () => {
               >
                 {file}
               </p>
-            </button>
+         </button>
           ))}
           {isOpen && (
             <div
@@ -652,7 +651,33 @@ export const Project = () => {
           {showPreview && (
             <div className="w-[50%] right-0 min-w-[320px] max-w-[900px] h-full flex flex-col bg-gray-100 border-l border-gray-700 transition-all duration-300 relative shadow-lg rounded-l-xl overflow-hidden">
               <div className="flex items-center justify-between px-3 py-2 bg-gray-900 text-white rounded-tl-xl border-b border-gray-800">
-                <h3 className="text-sm font-semibold">Live Preview</h3>
+                <input
+                  type="text"
+                  className="flex-1 bg-gray-800 text-white px-3 py-1 rounded focus:outline-none focus:ring focus:ring-blue-500 text-xs mr-2"
+                  value={previewUrl}
+                  onChange={e => setPreviewUrl(e.target.value)}
+                  placeholder="Enter preview URL..."
+                  spellCheck={false}
+                />
+                <button
+                  onClick={handleCopyUrl}
+                  className="ml-1 px-2 py-1 rounded bg-gray-700 cursor-pointer hover:bg-gray-600 text-xs"
+                  title="Copy URL"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 inline">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12H6.75A2.25 2.25 0 014.5 9.75v-6A2.25 2.25 0 016.75 1.5h6A2.25 2.25 0 0115 3.75V6" />
+                    <rect width="13.5" height="13.5" x="6.75" y="6.75" rx="2.25" />
+                  </svg>
+                </button>
+                <button
+                  onClick={handleReloadIframe}
+                  className="ml-1 px-2 py-1 rounded bg-gray-700 cursor-pointer hover:bg-gray-600 text-xs"
+                  title="Reload Preview"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 inline">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12a7.5 7.5 0 1115 0m-7.5 4.5V12h4.5" />
+                  </svg>
+                </button>
                 <button
                   onClick={handleHidePreview}
                   className="ml-1 px-2 py-1 rounded bg-red-700 cursor-pointer hover:bg-red-600 text-xs"
@@ -663,8 +688,18 @@ export const Project = () => {
                   </svg>
                 </button>
               </div>
-              <div className="flex-1 bg-[#0d1117] flex items-center justify-center overflow-hidden">
-                <LivePreview serverInstance={webcontainer} />
+              <div className="flex-1 bg-black/90 flex items-center justify-center overflow-hidden">
+                {previewUrl ? (
+                  <iframe
+                    key={iframeKey}
+                    src={previewUrl}
+                    className="w-full h-full border-0 rounded-bl-xl transition-all duration-300 bg-white"
+                    title="Live Preview"
+                    allow="accelerometer; camera; encrypted-media; geolocation; microphone; clipboard-write;"
+                  />
+                ) : (
+                  <div className="text-gray-400 text-center w-full">No preview URL</div>
+                )}
               </div>
             </div>
           )}

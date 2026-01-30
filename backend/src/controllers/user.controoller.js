@@ -107,10 +107,20 @@ export function Logout(req, res) {
   try {
     const token = req.cookies?.token || req.headers?.authorization?.split(' ')[1];
     if (!token || token === 'null' || token === 'undefined') {
-      res.clearCookie("token");
+      res.clearCookie("token", {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+      });
+
       return res.status(200).json({ message: "Logout Successful" });
     }
-    res.clearCookie("token");
+    res.clearCookie("token", {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+    });
+
     res.status(200).json({ message: "Logout Successful" })
   } catch (error) {
     console.log(error);
@@ -118,4 +128,4 @@ export function Logout(req, res) {
 
   }
 }
- 
+

@@ -9,7 +9,7 @@ import fs from 'fs';
 const app = express();
 app.use(cookieParser())
 app.use(cors({
-  origin: ['https://frontend-3hgp.onrender.com','http://localhost:5173'],
+  origin: ['https://frontend-3hgp.onrender.com', 'http://localhost:5173'],
   credentials: true
 }));
 app.use(express.json({
@@ -22,8 +22,8 @@ app.use(express.json({
   }
 }));
 app.use((req, res, next) => {
-  res.setHeader("Cross-Origin-Embedder-Policy","require-corp");
-  res.setHeader("Cross-Origin-Opener-Policy", "same-origin");
+  res.header('Cross-Origin-Embedder-Policy', 'require-corp');
+  res.header('Cross-Origin-Opener-Policy', 'same-origin');
   next();
 });
 

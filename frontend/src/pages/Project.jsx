@@ -11,6 +11,7 @@ import Editor from 'react-simple-code-editor';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/atom-one-dark.css';
 import { initializeWebContainer } from '../config/webcontainer';
+import LivePreview from '../components/LivePreview';
 
 export const Project = () => {
   const [showUserList, setShowUserList] = useState(false)
@@ -40,8 +41,8 @@ export const Project = () => {
 
   const [showPreview, setShowPreview] = React.useState(false);
   const [previewUrl, setPreviewUrl] = React.useState(IframeUrl || "");
-  const [iframeKey, setIframeKey] = React.useState(0); 
-  const url ="https://backend-cv0c.onrender.com"
+  const [iframeKey, setIframeKey] = React.useState(0);
+  const url = "https://backend-cv0c.onrender.com"
   React.useEffect(() => {
     if (IframeUrl && !previewUrl) setPreviewUrl(IframeUrl);
   }, [IframeUrl]);
@@ -326,46 +327,46 @@ export const Project = () => {
 
   let serverProcess;
 
-const handleRun = async () => {
-  if (!files || Object.keys(files).length === 0) {
-    toast.error("No files available to run");
-    return;
-  }
-
-  let instance = webcontainer;
-  if (!instance) {
-    instance = await initializeWebContainer();
-    setwebcontainer(instance);
-  }
-
-  if (serverProcess) {
-    await serverProcess.kill();
-    console.log("Previous server killed");
-  }
-
-  const formattedFiles = convertToWebContainerFormat(files);
-  await instance.mount(formattedFiles);
-
-  const installProcess = await instance.spawn('npm', ['install']);
-  installProcess.output.pipeTo(new WritableStream({
-    write(chunk) {
-      console.log(chunk);
+  const handleRun = async () => {
+    if (!files || Object.keys(files).length === 0) {
+      toast.error("No files available to run");
+      return;
     }
-  }));
 
-  serverProcess = await instance.spawn('npm', ['start']);
-  serverProcess.output.pipeTo(new WritableStream({
-    write(chunk) {
-      console.log(chunk);
+    let instance = webcontainer;
+    if (!instance) {
+      instance = await initializeWebContainer();
+      setwebcontainer(instance);
     }
-  }));
 
-  instance.on('server-ready', (port, url) => {
-    setIframeUrl(url);
-  });
+    if (serverProcess) {
+      await serverProcess.kill();
+      console.log("Previous server killed");
+    }
 
-  toast.success('Running code');
-};
+    const formattedFiles = convertToWebContainerFormat(files);
+    await instance.mount(formattedFiles);
+
+    const installProcess = await instance.spawn('npm', ['install']);
+    installProcess.output.pipeTo(new WritableStream({
+      write(chunk) {
+        console.log(chunk);
+      }
+    }));
+
+    serverProcess = await instance.spawn('npm', ['start']);
+    serverProcess.output.pipeTo(new WritableStream({
+      write(chunk) {
+        console.log(chunk);
+      }
+    }));
+
+    instance.on('server-ready', (port, url) => {
+      setIframeUrl(url);
+    });
+
+    toast.success('Running code');
+  };
 
   return (
     <>
@@ -535,7 +536,7 @@ const handleRun = async () => {
               >
                 {file}
               </p>
-         </button>
+            </button>
           ))}
           {isOpen && (
             <div
@@ -648,7 +649,25 @@ const handleRun = async () => {
             )}
           </div>
           {/* Preview Panel Section */}
-          
+          {showPreview && (
+            <div className="w-[50%] right-0 min-w-[320px] max-w-[900px] h-full flex flex-col bg-gray-100 border-l border-gray-700 transition-all duration-300 relative shadow-lg rounded-l-xl overflow-hidden">
+              <div className="flex items-center justify-between px-3 py-2 bg-gray-900 text-white rounded-tl-xl border-b border-gray-800">
+                <h3 className="text-sm font-semibold">Live Preview</h3>
+                <button
+                  onClick={handleHidePreview}
+                  className="ml-1 px-2 py-1 rounded bg-red-700 cursor-pointer hover:bg-red-600 text-xs"
+                  title="Hide Preview"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 inline">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+              <div className="flex-1 bg-[#0d1117] flex items-center justify-center overflow-hidden">
+                <LivePreview serverInstance={webcontainer} />
+              </div>
+            </div>
+          )}
         </div>
       </main>
       <div>

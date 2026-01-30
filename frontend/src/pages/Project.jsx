@@ -350,14 +350,14 @@ export const Project = () => {
     const installProcess = await instance.spawn('npm', ['install']);
     installProcess.output.pipeTo(new WritableStream({
       write(chunk) {
-        console.log(chunk);
+        // console.log(chunk);
       }
     }));
 
     serverProcess = await instance.spawn('npm', ['start']);
     serverProcess.output.pipeTo(new WritableStream({
       write(chunk) {
-        console.log(chunk);
+        // console.log(chunk);
       }
     }));
 

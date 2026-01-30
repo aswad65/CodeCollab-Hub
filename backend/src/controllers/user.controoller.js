@@ -107,11 +107,9 @@ export function Logout(req, res) {
   try {
     const token = req.cookies?.token || req.headers?.authorization?.split(' ')[1];
     if (!token || token === 'null' || token === 'undefined') {
-      res.clearCookie('token');
+      res.clearCookie("token");
       return res.status(200).json({ message: "Logout Successful" });
     }
-    res.clearCookie('token');
-    res.status(200).json({ message: "Logout Successful" })
   } catch (error) {
     console.log(error);
     res.status(401).json({ err: error.message })

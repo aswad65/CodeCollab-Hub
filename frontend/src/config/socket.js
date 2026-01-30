@@ -6,7 +6,7 @@ import socketIOClient from 'socket.io-client';
 let socketInstance =null;
 export const initializeSocket = (projectId) => {
    socketInstance=socketIOClient(
-      "http://localhost:5000",
+      "https://backend-cv0c.onrender.com",
       {
          auth:{
                token:localStorage.getItem("token")

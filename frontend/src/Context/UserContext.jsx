@@ -7,12 +7,13 @@ const UserContext = createContext()
 export const UserContextProvider = ({ children }) => {
     const [users, setusers] = useState([])
     const [user, setuser] = useState(null)
+    const url='https://backend-cv0c.onrender.com'
 
 
     async function registerUser(email, password) {
         try {
             const data = await axios.post(
-                "http://localhost:5000/api/user/register",
+                `${url}/api/user/register`,
                 { email, password },
                 { withCredentials: true }
             );
@@ -31,7 +32,7 @@ export const UserContextProvider = ({ children }) => {
     async function loginUser(email, password) {
         try {
             const data = await axios.post(
-                "http://localhost:5000/api/user/login",
+                `${url}/api/user/login`,
                 { email, password },
                 { withCredentials: true }
             );
@@ -45,7 +46,7 @@ export const UserContextProvider = ({ children }) => {
     }
         async function logoutUser() {
             try {
-                await axios.get("http://localhost:5000/api/user/logout", {}, { withCredentials: true });
+                await axios.get(`${url}/api/user/logout`, {}, { withCredentials: true });
                 localStorage.removeItem('token');
                 toast.success("Logout successful");
                 router.navigate({ to: "/login" });
@@ -57,7 +58,7 @@ export const UserContextProvider = ({ children }) => {
         const fetchProfile = async () => {
             try {
                 const { data } = await axios.get(
-                    `http://localhost:5000/api/user/profile`,
+                    `${url}/api/user/profile`,
                     { withCredentials: true }
                 );
                 setuser(data);
@@ -70,7 +71,7 @@ export const UserContextProvider = ({ children }) => {
     const getAll = async () => {
         try {
             const { data } = await axios.get(
-                "http://localhost:5000/api/user/Getallusers",
+                `${url}/api/user/Getallusers`,
                 { withCredentials: true }
             );
 

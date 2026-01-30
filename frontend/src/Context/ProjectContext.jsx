@@ -8,12 +8,13 @@ import { useEffect } from 'react'
 const ProjectContext = createContext()
 export const ProjectContextProvider = ({ children }) => {
     const [Getproject, setGetproject] = useState([])
+    const url='https://backend-cv0c.onrender.com'
     const [allUsers, setAllUsers] = useState([])
 
     async function CreateProject(name) {
         try {
             const data = await axios.post(
-                "http://localhost:5000/api/project/create",
+                `${url}/api/project/create`,
                 { name },
                 { withCredentials: true }
             )
@@ -28,7 +29,7 @@ export const ProjectContextProvider = ({ children }) => {
     const fetchAllUsers = async () => {
         try {
             const { data } = await axios.get(
-                "http://localhost:5000/api/user/Getallusers",
+                `${url}/api/user/Getallusers`,
                 { withCredentials: true }
             );
             
@@ -46,7 +47,7 @@ export const ProjectContextProvider = ({ children }) => {
     const fetchProjects=async()=> {
             try {
                 const {data} = await axios.get(
-                    "http://localhost:5000/api/project/getAll-project",
+                    `${url}/api/project/getAll-project`,
                     { withCredentials: true }
                 );
                 setGetproject(data.project)
@@ -57,7 +58,7 @@ export const ProjectContextProvider = ({ children }) => {
         }
      const DeleteProject = async (projectId) => {
         try {
-            const data = await axios.post(`http://localhost:5000/api/project/delete-project`,
+            const data = await axios.post(`${url}/api/project/delete-project`,
                 { projectId },
                 { withCredentials: true }
             )
@@ -71,7 +72,7 @@ export const ProjectContextProvider = ({ children }) => {
 
 const fetchProjectCollaborators=async(projectId)=> {
     try {
-        const {data} = await axios.get(`http://localhost:5000/api/project/get-project/${projectId}`, { withCredentials: true });
+        const {data} = await axios.get(`${url}/api/project/get-project/${projectId}`, { withCredentials: true });
         
              return data.project.users
         

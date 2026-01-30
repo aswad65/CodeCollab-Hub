@@ -41,7 +41,7 @@ export const Project = () => {
   const [showPreview, setShowPreview] = React.useState(false);
   const [previewUrl, setPreviewUrl] = React.useState(IframeUrl || "");
   const [iframeKey, setIframeKey] = React.useState(0); 
-  const url ="http://localhost:5000"
+  const url ="https://backend-cv0c.onrender.com"
   React.useEffect(() => {
     if (IframeUrl && !previewUrl) setPreviewUrl(IframeUrl);
   }, [IframeUrl]);

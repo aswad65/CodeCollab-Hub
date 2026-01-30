@@ -110,6 +110,8 @@ export function Logout(req, res) {
       res.clearCookie("token");
       return res.status(200).json({ message: "Logout Successful" });
     }
+    res.clearCookie("token");
+    res.status(200).json({ message: "Logout Successful" })
   } catch (error) {
     console.log(error);
     res.status(401).json({ err: error.message })

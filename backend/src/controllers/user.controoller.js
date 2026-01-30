@@ -29,10 +29,12 @@ export async function Register(req, res) {
     });
     const token = await user.generateToken()
     res.cookie("token", token, {
-      maxAge: 24 * 60 * 60 * 1000,
       httpOnly: true,
-      sameSite: "lax",
+      secure: true,
+      sameSite: "none",
+      maxAge: 24 * 60 * 60 * 1000
     });
+
     res.status(201).json({ message: "Register Successful", token });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -61,10 +63,12 @@ export async function Login(req, res) {
     const token = await user.generateToken()
 
     res.cookie("token", token, {
-      maxAge: 24 * 60 * 60 * 1000,
       httpOnly: true,
-      sameSite: "lax",
+      secure: true,
+      sameSite: "none",
+      maxAge: 24 * 60 * 60 * 1000
     });
+
     res.status(200).json({
       message: "Login successful",
       user: {

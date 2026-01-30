@@ -5,7 +5,7 @@ import { useUserContext } from '../Context/UserContext';
 
 export const Profile = () => {
   const { Getproject, fetchProjects } = useProjectContext()
-  const { user } = useUserContext()
+  const { user, } = useUserContext()
 
   useEffect(() => {
     fetchProjects();

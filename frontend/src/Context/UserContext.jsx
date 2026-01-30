@@ -46,9 +46,9 @@ export const UserContextProvider = ({ children }) => {
     }
         async function logoutUser() {
             try {
-                await axios.get(`${url}/api/user/logout`, {}, { withCredentials: true });
+                const data = await axios.get(`${url}/api/user/logout`, {}, { withCredentials: true });
                 localStorage.removeItem('token');
-                toast.success("Logout successful");
+                toast.success(data.data.message);
                 router.navigate({ to: "/login" });
             } catch (error) {
                 toast.error(error.response?.data?.message || "Logout failed");

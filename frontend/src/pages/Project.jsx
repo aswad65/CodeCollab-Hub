@@ -648,61 +648,7 @@ const handleRun = async () => {
             )}
           </div>
           {/* Preview Panel Section */}
-          {showPreview && (
-            <div className="w-[50%] right-0 min-w-[320px] max-w-[900px] h-full flex flex-col bg-gray-100 border-l border-gray-700 transition-all duration-300 relative shadow-lg rounded-l-xl overflow-hidden">
-              <div className="flex items-center justify-between px-3 py-2 bg-gray-900 text-white rounded-tl-xl border-b border-gray-800">
-                <input
-                  type="text"
-                  className="flex-1 bg-gray-800 text-white px-3 py-1 rounded focus:outline-none focus:ring focus:ring-blue-500 text-xs mr-2"
-                  value={previewUrl}
-                  onChange={e => setPreviewUrl(e.target.value)}
-                  placeholder="Enter preview URL..."
-                  spellCheck={false}
-                />
-                <button
-                  onClick={handleCopyUrl}
-                  className="ml-1 px-2 py-1 rounded bg-gray-700 cursor-pointer hover:bg-gray-600 text-xs"
-                  title="Copy URL"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 inline">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12H6.75A2.25 2.25 0 014.5 9.75v-6A2.25 2.25 0 016.75 1.5h6A2.25 2.25 0 0115 3.75V6" />
-                    <rect width="13.5" height="13.5" x="6.75" y="6.75" rx="2.25" />
-                  </svg>
-                </button>
-                <button
-                  onClick={handleReloadIframe}
-                  className="ml-1 px-2 py-1 rounded bg-gray-700 cursor-pointer hover:bg-gray-600 text-xs"
-                  title="Reload Preview"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 inline">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12a7.5 7.5 0 1115 0m-7.5 4.5V12h4.5" />
-                  </svg>
-                </button>
-                <button
-                  onClick={handleHidePreview}
-                  className="ml-1 px-2 py-1 rounded bg-red-700 cursor-pointer hover:bg-red-600 text-xs"
-                  title="Hide Preview"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 inline">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              </div>
-              <div className="flex-1 bg-black/90 flex items-center justify-center overflow-hidden">
-                {previewUrl ? (
-                  <iframe
-                    key={iframeKey}
-                    src={previewUrl}
-                    className="w-full h-full border-0 rounded-bl-xl transition-all duration-300 bg-white"
-                    title="Live Preview"
-                    allow="accelerometer; camera; encrypted-media; geolocation; microphone; clipboard-write;"
-                  />
-                ) : (
-                  <div className="text-gray-400 text-center w-full">No preview URL</div>
-                )}
-              </div>
-            </div>
-          )}
+          
         </div>
       </main>
       <div>
